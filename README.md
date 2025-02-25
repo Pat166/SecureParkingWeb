@@ -1,6 +1,6 @@
 # Secure Parking Web
 
-Este proyecto es una aplicación web para gestionar el estacionamiento seguro.
+Esta aplicacion web tiene el objetivo gestionar los usuarios de Secure Parking.
 
 ## Estructura del Proyecto
 
