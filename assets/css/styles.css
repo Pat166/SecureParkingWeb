@@ -1,9 +1,17 @@
 body {
     font-family: Arial, sans-serif;
     display: flex;
+    justify-content: center;
+    align-items: center;
     height: 100vh;
     background: #f4f9fc;
     margin: 0;
+}
+
+.headerProfile {
+    width: 60%;
+    padding-left: 20px;
+    align-self: flex-start;
 }
 
 .left {
@@ -66,7 +74,7 @@ body {
 .login-box {
     width: 80%;
     max-width: 350px;
-    padding: 20px;
+    padding: 50px;
     box-shadow: 0 0 10px rgb(254, 254, 254);
     border-radius: 5px;
     background: white;
@@ -87,7 +95,7 @@ body {
 
 .login-box button {
     width: 100%;
-    padding: 10px;
+    margin-top: 50px;
     background-color: #1A2d68;
     border: none;
     border-radius: 5px;
@@ -103,10 +111,12 @@ body {
 /* Contenedor principal */
 .profile-wrapper {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 80%;
     height: 80vh;
+    margin: 0 auto; /* Centrar horizontalmente */
 }
 
 /* Mantiene el perfil estilizado */
@@ -115,8 +125,7 @@ body {
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
-    height: 80vh;
-    justify-content: left;
+    padding: 20px;
     text-align: center;
 }
 
@@ -129,7 +138,7 @@ body {
 
 /* Estilos de la tabla */
 .profile-table {
-    width: 60%;
+    width: 100%;
     border-collapse: separate;
     margin: 0 auto;
     border-spacing: 20px 10px;
@@ -150,22 +159,60 @@ body {
 
 .profile-details {
     display: flex;
-    justify-content: center;
+    justify-content: center; /* Centrar horizontalmente */
     align-items: center;
-    flex-direction: column;
+    flex-direction: row;
+}
+
+.profile-image-container {
+    margin-left: 20px;
+}
+
+.profile-image {
+    max-width: 150px;
+    max-height: 150px;
+    width: auto;
+    height: auto;
+    border-radius: 25%;
+    border: 4px solid #000000; /* Borde visible */
+}
+
+.profile-vehicles {
+    margin-top: 20px;
+    width: 100%;
 }
 
 @media (max-width: 920px) {
-    body{
+    body {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
     }
-    .left{
-        width:100%
+    .left {
+        width: 100%;
     }
-    .right{
-        width:100%
+    .right {
+        width: 100%;
     }
+}
+
+.title, .title2 {
+    display: inline-block;
+}
+
+.title2 {
+    color: #FFD700;
+    -webkit-text-stroke: .6px #FFD700; /* Grosor y color del borde */
+}
+
+.title {
+    -webkit-text-stroke: .6px #000; /* Grosor y color del borde */
+}
+
+.raya {
+    background-color: black;
+    width: 320px;
+    height: 5px;
+    box-shadow: 1px .1px 10px rgba(0, 0, 0, 0.8);
 }

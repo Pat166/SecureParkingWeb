@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+// Habilitar la visualización de errores de PHP
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Incluir archivo de configuración
 require_once 'config.php';
 

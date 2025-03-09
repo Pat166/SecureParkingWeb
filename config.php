@@ -1,9 +1,9 @@
-<!-- filepath: /c:/Users/adria/Documents/Python/Python/IAPark/SecureParkingWeb/config.php -->
+
 <?php
-define('DB_SERVER', 'bqstuhbox6cpmwqjsqpa-mysql.services.clever-cloud.com');
-define('DB_USERNAME', 'uhg59mqvopfuphfo');
-define('DB_PASSWORD', 'TUJm46YO4EL3gLO7ld4O');
-define('DB_NAME', 'bqstuhbox6cpmwqjsqpa');
+define('DB_SERVER', '162.241.62.202');
+define('DB_USERNAME', 'securep6_AplicacionWeb');
+define('DB_PASSWORD', 'SecureParking');
+define('DB_NAME', 'securep6_EstacionamientoSeguro');
 define('DB_PORT', 3306);
 
 // Conexión a la base de datos
