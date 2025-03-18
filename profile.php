@@ -1,5 +1,5 @@
-<!-- filepath: /c:/Users/adria/Documents/Python/Python/IAPark/SecureParkingWeb/profile.php -->
 <?php
+$seccionActiva = isset($_GET['seccion']) ? $_GET['seccion'] : 'perfil';
 session_start();
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.html");
@@ -34,74 +34,100 @@ if ($usuarioImagen && !empty($usuarioImagen['Fotografia'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil del Usuario</title>
     <link rel="stylesheet" href="assets/css/styles.css">
-    <style>body { flex-direction: column; }</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById("sidebar");
+            if (sidebar.style.right === "0px") {
+                sidebar.style.right = "-250px";
+            } else {
+                sidebar.style.right = "0px";
+            }
+        }
+
+        function showSection(sectionId) {
+            var sections = document.querySelectorAll('.profile-section');
+            sections.forEach(function(section) {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
+            toggleSidebar();
+        }
+    </script>
 </head>
 <body>
     <div class="headerProfile">
+        <div class="LogoEscrito" style="margin-left: 30px;">
             <h1 class="title">Secure Parking </h1>
-            <h1 class="title2">WEB</h2>
+            <h1 class="title2">WEB</h1>
             <div class="raya"></div>
+        </div>
+        <button class="btn" onclick="toggleSidebar()"><i class="fa fa-bars"></i></button>
     </div>
+
+    <div id="sidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="toggleSidebar()">&times;</a>
+        <a href="profile.php?seccion=perfil">Perfil</a> <!-- Cambiado para recargar con seccion=perfil -->
+        <a href="profile.php?seccion=vehicles">Vehículos</a> <!-- Cambiado para recargar con seccion=vehicles -->
+        <a href="profile.php?seccion=settings">Configuración</a> <!-- Cambiado para recargar con seccion=settings -->
+        <a href="logout.php">Cerrar sesión</a>
+    </div>
+
     <div class="profile-wrapper">
         <div class="profile-container">
-            <div class="profile-header">
+            <div id="profile" class="profile-section" style="display: <?php echo ($seccionActiva === 'perfil') ? 'block' : 'none'; ?>;">
                 <h1>Bienvenido, <?php echo htmlspecialchars($usuario['NombreCompleto']);?></h1>
-            </div>
-            <div class="profile-details">
-                <div>
-                    <table class="profile-table">
-                        <tr>
-                            <th>Matricula</th>
-                            <td><?php echo htmlspecialchars($usuario['Matricula']); ?></td>
-                        </tr>
-                        <tr>
-                            <th>Correo</th>
-                            <td><?php echo htmlspecialchars($usuario['Correo']); ?></td>
-                        </tr>
-                        <tr>
-                            <th>Teléfono</th>
-                            <td><?php echo htmlspecialchars($usuario['Telefono']); ?></td>
-                        </tr>
-                        <tr>
-                            <th>Carrera</th>
-                            <td><?php echo htmlspecialchars($usuario['Carrera']); ?></td>
-                        </tr>
-                    </table>
-                </div>
+                <table class="profile-table">
+                    <tr><th>Matricula</th><td><?php echo htmlspecialchars($usuario['Matricula']); ?></td></tr>
+                    <tr><th>Correo</th><td><?php echo htmlspecialchars($usuario['Correo']); ?></td></tr>
+                    <tr><th>Teléfono</th><td><?php echo htmlspecialchars($usuario['Telefono']); ?></td></tr>
+                    <tr><th>Carrera</th><td><?php echo htmlspecialchars($usuario['Carrera']); ?></td></tr>
+                </table>
                 <div class="profile-image-container">
-                    <?php if ($imagenBase64): ?>
+                    <?php if (!empty($imagenBase64)): ?>
                         <img src="data:image/jpeg;base64,<?php echo $imagenBase64; ?>" alt="Fotografía del Usuario" class="profile-image">
                     <?php else: ?>
                         <img src="assets/images/default.png" alt="Fotografía del Usuario" class="profile-image">
                     <?php endif; ?>
                 </div>
             </div>
-            <div class="profile-vehicles">
+            <!-- Sección de Vehículos -->
+            <div id="vehicles" class="profile-section" style="display: <?php echo ($seccionActiva === 'vehicles') ? 'block' : 'none'; ?>;">
                 <h2>Vehículos Registrados</h2>
+                <form method="post" action="agregar_vehiculo.php">
+                    <label for="placa">Placa:</label>
+                    <input type="text" id="placa" name="placa" required>
+                    <label for="marca">Marca:</label>
+                    <input type="text" id="marca" name="marca" required>
+                    <label for="modelo">Modelo:</label>
+                    <input type="text" id="modelo" name="modelo" required>
+                    <label for="color">Color:</label>
+                    <input type="text" id="color" name="color" required>
+                    <label for="tipo">Tipo:</label>
+                    <input type="text" id="tipo" name="tipo" required>
+                    <button type="submit" class="myButton">Agregar Vehículo</button>
+                </form>
                 <?php if (count($vehiculos) > 0): ?>
-                <table class="profile-table">
-                    <tr>
-                        <th>Placa</th>
-                        <th>Marca</th>
-                        <th>Modelo</th>
-                        <th>Color</th>
-                        <th>Tipo</th>
-                    </tr>
-                    <?php foreach ($vehiculos as $vehiculo): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($vehiculo['Placa']); ?></td>
-                        <td><?php echo htmlspecialchars($vehiculo['Marca']); ?></td>
-                        <td><?php echo htmlspecialchars($vehiculo['Modelo']); ?></td>
-                        <td><?php echo htmlspecialchars($vehiculo['Color']); ?></td>
-                        <td><?php echo htmlspecialchars($vehiculo['Tipo']); ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                </table>
-                <?php else: ?>
-                <p>No tienes vehículos registrados.</p>
-                <?php endif; ?>
+                    <table class="profile-table">
+                        <tr><th>Placa</th><th>Marca</th><th>Modelo</th><th>Color</th><th>Tipo</th><th>Acciones</th></tr>
+                        <?php foreach ($vehiculos as $vehiculo): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($vehiculo['Placa']); ?></td>
+                                <td><?php echo htmlspecialchars($vehiculo['Marca']); ?></td>
+                                <td><?php echo htmlspecialchars($vehiculo['Modelo']); ?></td>
+                                <td><?php echo htmlspecialchars($vehiculo['Color']); ?></td>
+                                <td><?php echo htmlspecialchars($vehiculo['Tipo']); ?></td>
+                                <td>
+                                    <form method="post" action="eliminar_vehiculo.php" style="display:inline;">
+                                        <input type="hidden" name="vehiculo_id" value="<?php echo $vehiculo['IDVehiculo']; ?>">
+                                        <button type="submit" class="myButton">Eliminar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </table>
+                <?php else: ?><p>No tienes vehículos registrados.</p><?php endif; ?>
             </div>
-            <a href="logout.php" class="myButton">Cerrar sesión</a>
         </div>
     </div>
 </body>
