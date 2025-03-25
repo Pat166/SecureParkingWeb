@@ -15,7 +15,7 @@ body {
     padding: 20px;
     background: #505a7ac7;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    display:flex;
+    display: flex;
     justify-content: space-between;
     align-items: center;
 }
@@ -58,6 +58,8 @@ body {
     padding: 20px 50px;
     text-decoration: none;
     text-shadow: 0px 1px 0px #1A2d68;
+    margin-bottom: 10px; /* Reducido de 20px a 10px para menos separación entre botones */
+    margin-top: 20px; /* Reducido de 40px a 20px para menos separación desde el título */
 }
 
 .myButton:active {
@@ -73,9 +75,9 @@ body {
     border-radius: 5px;
     background: white;
     display: flex;
-    flex-direction: column; /* Esto organiza los elementos en columna */
+    flex-direction: column;
     align-items: center;
-    gap: 15px; /* Separación entre los campos */
+    gap: 15px;
 }
 
 .login-box input {
@@ -150,7 +152,7 @@ body {
 
 .profile-details {
     display: flex;
-    justify-content: center; /* Centrar horizontalmente */
+    justify-content: center;
     align-items: center;
     flex-direction: row;
 }
@@ -165,7 +167,7 @@ body {
     width: auto;
     height: auto;
     border-radius: 25%;
-    border: 4px solid #000000; /* Borde visible */
+    border: 4px solid #000000;
 }
 
 .profile-vehicles {
@@ -218,11 +220,11 @@ body {
 
 .title2 {
     color: #FFD700;
-    -webkit-text-stroke: .6px #FFD700; /* Grosor y color del borde */
+    -webkit-text-stroke: .6px #FFD700;
 }
 
 .title {
-    -webkit-text-stroke: .6px #000; /* Grosor y color del borde */
+    -webkit-text-stroke: .6px #000;
 }
 
 .raya {
@@ -233,31 +235,31 @@ body {
 }
 
 .btn {
-    background-color: transparent; /* Blue background */
-    border: none; /* Remove borders */
+    background-color: transparent;
+    border: none;
     color: #1A2d68;
-    padding: 12px 16px; /* Some padding */
+    padding: 12px 16px;
     font-size: 30px;
     margin-right: 20px;
-    cursor: pointer; /* Mouse pointer on hover */
+    cursor: pointer;
     margin-left: auto;
-  }
+}
 
-  /* Estilos para la barra lateral */
-  .sidebar {
-    height: 100%; /* Altura completa */
-    width: 250px; /* Ancho de la barra lateral */
-    position: fixed; /* Fijo en la pantalla */
-    z-index: 1000; /* Encima de otros elementos */
+/* Estilos para la barra lateral */
+.sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    z-index: 1000;
     top: 0;
-    right: -250px; /* Oculta la barra lateral fuera de la pantalla */
-    background-color: #1a2d68; /* Fondo oscuro */
-    overflow-x: hidden; /* Ocultar desbordamiento horizontal */
-    transition: 0.5s; /* Transición suave */
-    padding-top: 60px; /* Espacio superior */
-    display: flex; /* Activar flexbox */
-    flex-direction: column; /* Organizar elementos en columna */
-    align-items: center; /* Centrar horizontalmente */
+    right: -250px;
+    background-color: #1a2d68;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .sidebar a {
@@ -267,7 +269,7 @@ body {
     color: #fff;
     display: block;
     transition: 0.3s;
-    text-align: center; /* Centrar texto */
+    text-align: center;
 }
 
 .sidebar a:hover {

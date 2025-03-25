@@ -1,35 +1,46 @@
 <?php
 $seccionActiva = isset($_GET['seccion']) ? $_GET['seccion'] : 'perfil';
 session_start();
-if (!isset($_SESSION['usuario'])) {
+if ($_SESSION['usuario']) {
+    require_once 'config.php';
+
+    $usuario = $_SESSION['usuario'];
+    
+    // Obtener los vehículos del usuario
+    $stmt = $pdo->prepare("SELECT * FROM Vehiculo WHERE PropietarioID = :propietario_id");
+    $stmt->bindParam(':propietario_id', $usuario['ID'], PDO::PARAM_INT);
+    $stmt->execute();
+    $vehiculos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Obtener la imagen del usuario
+    $stmt = $pdo->prepare("SELECT Fotografia FROM Usuarios WHERE ID = :id");
+    $stmt->bindParam(':id', $usuario['ID'], PDO::PARAM_INT);
+    $stmt->execute();
+    $usuarioImagen = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    // Obtener los registros de entradas y salidas del usuario
+    $stmt = $pdo->prepare("SELECT PlacaVehiculo, Entrada, Salida FROM Registro WHERE UsuarioID = :usuario_id ORDER BY Entrada DESC");
+    $stmt->bindParam(':usuario_id', $usuario['ID'], PDO::PARAM_INT);
+    $stmt->execute();
+    $registros = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    $imagenBase64 = '';
+    if ($usuarioImagen && !empty($usuarioImagen['Fotografia'])) {
+        $imagenBase64 = base64_encode($usuarioImagen['Fotografia']);
+    }
+}
+else {
     header("Location: login.html");
     exit();
-}
-
-require_once 'config.php';
-
-$usuario = $_SESSION['usuario'];
-
-// Obtener los vehículos del usuario
-$stmt = $pdo->prepare("SELECT * FROM Vehiculo WHERE PropietarioID = :propietario_id");
-$stmt->bindParam(':propietario_id', $usuario['ID'], PDO::PARAM_INT);
-$stmt->execute();
-$vehiculos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Obtener la imagen del usuario
-$stmt = $pdo->prepare("SELECT Fotografia FROM Usuarios WHERE ID = :id");
-$stmt->bindParam(':id', $usuario['ID'], PDO::PARAM_INT);
-$stmt->execute();
-$usuarioImagen = $stmt->fetch(PDO::FETCH_ASSOC);
-
-$imagenBase64 = '';
-if ($usuarioImagen && !empty($usuarioImagen['Fotografia'])) {
-    $imagenBase64 = base64_encode($usuarioImagen['Fotografia']);
 }
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<meta http-equiv="Expires" content="0">
+    <meta http-equiv="Last-Modified" content="0">
+    <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
+    <meta http-equiv="Pragma" content="no-cache">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil del Usuario</title>
@@ -66,10 +77,11 @@ if ($usuarioImagen && !empty($usuarioImagen['Fotografia'])) {
     </div>
 
     <div id="sidebar" class="sidebar">
-        <a href="javascript:void(0)" class="closebtn" onclick="toggleSidebar()">&times;</a>
-        <a href="profile.php?seccion=perfil">Perfil</a> <!-- Cambiado para recargar con seccion=perfil -->
-        <a href="profile.php?seccion=vehicles">Vehículos</a> <!-- Cambiado para recargar con seccion=vehicles -->
-        <a href="profile.php?seccion=settings">Configuración</a> <!-- Cambiado para recargar con seccion=settings -->
+        <a href="javascript:void(0)" class="closebtn" onclick="toggleSidebar()">×</a>
+        <a href="profile.php?seccion=perfil">Perfil</a>
+        <a href="profile.php?seccion=vehicles">Vehículos</a>
+        <a href="profile.php?seccion=registros">Registros</a>
+        <a href="profile.php?seccion=settings">Configuración</a>
         <a href="logout.php">Cerrar sesión</a>
     </div>
 
@@ -91,7 +103,7 @@ if ($usuarioImagen && !empty($usuarioImagen['Fotografia'])) {
                     <?php endif; ?>
                 </div>
             </div>
-            <!-- Sección de Vehículos -->
+
             <div id="vehicles" class="profile-section" style="display: <?php echo ($seccionActiva === 'vehicles') ? 'block' : 'none'; ?>;">
                 <h2>Vehículos Registrados</h2>
                 <form method="post" action="agregar_vehiculo.php">
@@ -127,6 +139,24 @@ if ($usuarioImagen && !empty($usuarioImagen['Fotografia'])) {
                         <?php endforeach; ?>
                     </table>
                 <?php else: ?><p>No tienes vehículos registrados.</p><?php endif; ?>
+            </div>
+
+            <div id="registros" class="profile-section" style="display: <?php echo ($seccionActiva === 'registros') ? 'block' : 'none'; ?>;">
+                <h2>Registros de Entradas y Salidas</h2>
+                <?php if (count($registros) > 0): ?>
+                    <table class="profile-table">
+                        <tr><th>Placa</th><th>Entrada</th><th>Salida</th></tr>
+                        <?php foreach ($registros as $registro): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($registro['PlacaVehiculo']); ?></td>
+                                <td><?php echo htmlspecialchars($registro['Entrada']); ?></td>
+                                <td><?php echo $registro['Salida'] ? htmlspecialchars($registro['Salida']) : 'Aún en el estacionamiento'; ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </table>
+                <?php else: ?>
+                    <p>No tienes registros de entradas o salidas.</p>
+                <?php endif; ?>
             </div>
         </div>
     </div>
