@@ -1,27 +1,33 @@
 <?php
 require_once 'config.php';
 
+ob_start();
 session_start();
+
+// Activar reporte de errores para depuración
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 // Verificar si se recibió el ID del usuario
 if (!isset($_POST['usuario_id']) && !isset($_POST['submit'])) {
-    header("Location: profile_Administrador.php");
+    $_SESSION['error'] = "No se especificó un usuario para modificar";
+    ob_end_clean(); // Limpiar el buffer antes de redirigir
+    header("Location: admin.php");
     exit();
 }
 
 $usuario_id = isset($_POST['usuario_id']) ? $_POST['usuario_id'] : null;
 
-// Si el formulario de modificación fue enviado
+// Procesar el formulario si se envió
 if (isset($_POST['submit'])) {
     $nombre = $_POST['nombre'];
     $sexo = $_POST['sexo'];
-    $estatus = isset($_POST['estatus']) ? 1 : 0; // Checkbox: 1 si está marcado, 0 si no
+    $estatus = isset($_POST['estatus']) ? 1 : 0;
     $estatusParking = isset($_POST['estatusParking']) ? 1 : 0;
-    $carrera = $_POST['carrera'] ?: null; // Puede ser NULL
+    $carrera = $_POST['carrera'] ?: null;
     $telefono = $_POST['telefono'];
     $correo = $_POST['correo'];
 
-    // Manejo de la fotografía (si se sube una nueva)
     $fotografia = null;
     if (isset($_FILES['fotografia']) && $_FILES['fotografia']['error'] == UPLOAD_ERR_OK) {
         $fotografia = file_get_contents($_FILES['fotografia']['tmp_name']);
@@ -35,30 +41,45 @@ if (isset($_POST['submit'])) {
             $stmt = $pdo->prepare("UPDATE Usuarios SET NombreCompleto = ?, Sexo = ?, Estatus = ?, EstatusParking = ?, Carrera = ?, Telefono = ?, Correo = ? WHERE ID = ?");
             $stmt->execute([$nombre, $sexo, $estatus, $estatusParking, $carrera, $telefono, $correo, $usuario_id]);
         }
-        $_SESSION['message'] = "Usuario modificado exitosamente.";
-        header("Location: profile_Administrador.php");
+
+        if ($stmt->rowCount() > 0) {
+            $_SESSION['message'] = "Usuario modificado exitosamente.";
+        } else {
+            $_SESSION['error'] = "No se realizaron cambios o el usuario no existe.";
+        }
+        ob_end_clean(); // Limpiar el buffer antes de redirigir
+        header("Location: admin.php");
+        header("Cache-Control: no-cache, must-revalidate");
         exit();
     } catch (PDOException $e) {
         $_SESSION['error'] = "Error al modificar usuario: " . $e->getMessage();
-    }
-} else {
-    // Obtener datos del usuario para mostrar en el formulario
-    try {
-        $stmt = $pdo->prepare("SELECT * FROM Usuarios WHERE ID = ?");
-        $stmt->execute([$usuario_id]);
-        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$usuario) {
-            $_SESSION['error'] = "Usuario no encontrado.";
-            header("Location: profile_Administrador.php");
-            exit();
-        }
-    } catch (PDOException $e) {
-        $_SESSION['error'] = "Error al obtener usuario: " . $e->getMessage();
-        header("Location: profile_Administrador.php");
+        ob_end_clean();
+        header("Location: admin.php");
         exit();
     }
 }
+
+// Obtener datos del usuario para el formulario
+try {
+    $stmt = $pdo->prepare("SELECT * FROM Usuarios WHERE ID = ?");
+    $stmt->execute([$usuario_id]);
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$usuario) {
+        $_SESSION['error'] = "Usuario no encontrado.";
+        ob_end_clean();
+        header("Location: admin.php");
+        exit();
+    }
+} catch (PDOException $e) {
+    $_SESSION['error'] = "Error al obtener usuario: " . $e->getMessage();
+    ob_end_clean();
+    header("Location: admin.php");
+    exit();
+}
+
+// Solo ahora generamos el HTML
+ob_end_flush(); // Liberar el buffer para mostrar el formulario
 ?>
 
 <!DOCTYPE html>
@@ -148,7 +169,7 @@ if (isset($_POST['submit'])) {
             <?php endif; ?>
             
             <button type="submit" name="submit" class="myButton">Guardar Cambios</button>
-            <a href="profile_Administrador.php" class="myButton">Cancelar</a>
+            <a href="admin.php" class="myButton">Cancelar</a>
         </form>
     </div>
 </body>

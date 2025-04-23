@@ -1,11 +1,12 @@
 <?php
 require_once 'config.php';
 
+ob_start();
 session_start();
 
 // Verificar si se recibió el ID del vehículo
 if (!isset($_POST['vehiculo_id']) && !isset($_POST['submit'])) {
-    header("Location: profile_Administrador.php?error=No se especificó un vehículo para modificar");
+    header("Location: admin.php?error=No se especificó un vehículo para modificar");
     exit();
 }
 
@@ -27,7 +28,7 @@ if (isset($_POST['submit'])) {
         try {
             $stmt = $pdo->prepare("UPDATE Vehiculo SET Placa = ?, Marca = ?, Modelo = ?, Color = ? WHERE IDVehiculo = ?");
             $stmt->execute([$placa, $marca, $modelo, $color, $vehiculo_id]);
-            header("Location: profile_Administrador.php?message=Vehículo modificado exitosamente");
+            header("Location: admin.php?message=Vehículo modificado exitosamente");
             exit();
         } catch (PDOException $e) {
             $error = "Error al modificar vehículo: " . $e->getMessage();
@@ -41,11 +42,11 @@ if (isset($_POST['submit'])) {
         $vehiculo = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$vehiculo) {
-            header("Location: profile_Administrador.php?error=Vehículo no encontrado");
+            header("Location: admin.php?error=Vehículo no encontrado");
             exit();
         }
     } catch (PDOException $e) {
-        header("Location: profile_Administrador.php?error=Error al obtener vehículo: " . urlencode($e->getMessage()));
+        header("Location: admin.php?error=Error al obtener vehículo: " . urlencode($e->getMessage()));
         exit();
     }
 }
@@ -56,10 +57,6 @@ if (isset($_POST['submit'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Expires" content="0">
-    <meta http-equiv="Last-Modified" content="0">
-    <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
-    <meta http-equiv="Pragma" content="no-cache">
     <title>Modificar Vehículo</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -128,7 +125,7 @@ if (isset($_POST['submit'])) {
             <label>Color:</label>
             <input type="text" name="color" value="<?php echo htmlspecialchars($vehiculo['Color']); ?>" required>
             <button type="submit" name="submit" class="myButton">Guardar Cambios</button>
-            <a href="profile_Administrador.php" class="myButton">Cancelar</a>
+            <a href="admin.php" class="myButton">Cancelar</a>
         </form>
     </div>
 </body>

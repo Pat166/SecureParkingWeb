@@ -1,7 +1,7 @@
 body {
     flex-direction: column;
     font-family: Arial, sans-serif;
-    display: flex;
+    display: -webkit-box;
     justify-content: center;
     align-items: center;
     background: #f4f9fc;
@@ -12,7 +12,7 @@ body {
 
 .headerProfile {
     width: 100%;
-    padding: 20px;
+    padding: 15px;
     background: #505a7ac7;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -25,12 +25,14 @@ body {
     background: #f4f9fc;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: left;
 }
 
 .left img {
-    max-width: 80%;
-    max-height: 80%;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
 }
 
 .right {
@@ -54,12 +56,12 @@ body {
     cursor: pointer;
     color: white;
     font-family: Arial;
-    font-size: 19px;
-    padding: 20px 50px;
+    font-size: 16px;
+    padding: 15px 30px;
     text-decoration: none;
     text-shadow: 0px 1px 0px #1A2d68;
-    margin-bottom: 10px; /* Reducido de 20px a 10px para menos separación entre botones */
-    margin-top: 20px; /* Reducido de 40px a 20px para menos separación desde el título */
+    margin-bottom: 10px;
+    margin-top: 15px;
 }
 
 .myButton:active {
@@ -68,22 +70,22 @@ body {
 }
 
 .login-box {
-    width: 80%;
+    width: 90%;
     max-width: 350px;
-    padding: 50px;
-    box-shadow: 0 0 10px rgb(254, 254, 254);
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     background: white;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
 }
 
 .login-box input {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
+    padding: 8px;
+    margin-bottom: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
@@ -91,12 +93,13 @@ body {
 
 .login-box button {
     width: 100%;
-    margin-top: 50px;
+    margin-top: 20px;
     background-color: #1A2d68;
     border: none;
     border-radius: 5px;
     color: white;
-    font-size: 18px;
+    font-size: 16px;
+    padding: 10px;
     cursor: pointer;
 }
 
@@ -109,7 +112,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 80%;
+    width: 90%;
 }
 
 /* Mantiene el perfil estilizado */
@@ -118,15 +121,15 @@ body {
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
-    padding: 20px;
+    padding: 15px;
     text-align: center;
 }
 
 /* Encabezado del perfil */
 .profile-header h1 {
     color: #333;
-    font-size: 20px;
-    margin-bottom: 15px;
+    font-size: 18px;
+    margin-bottom: 10px;
 }
 
 /* Estilos de la tabla */
@@ -134,11 +137,11 @@ body {
     width: 100%;
     border-collapse: separate;
     margin: 0 auto;
-    border-spacing: 20px 10px;
+    border-spacing: 10px 5px;
 }
 
 .profile-table th, .profile-table td {
-    padding: 10px;
+    padding: 8px;
     text-align: left;
     border-bottom: 0px solid #ddd;
     background: #DEEBF3;
@@ -158,25 +161,25 @@ body {
 }
 
 .profile-image-container {
-    margin-left: 20px;
+    margin-left: 15px;
 }
 
 .profile-image {
-    max-width: 150px;
-    max-height: 150px;
+    max-width: 100px;
+    max-height: 100px;
     width: auto;
     height: auto;
     border-radius: 25%;
-    border: 4px solid #000000;
+    border: 3px solid #000000;
 }
 
 .profile-vehicles {
-    margin-top: 20px;
+    margin-top: 15px;
     width: 100%;
 }
 
 .add-vehicle {
-    margin-top: 20px;
+    margin-top: 15px;
     width: 100%;
 }
 
@@ -187,30 +190,99 @@ body {
 }
 
 .add-vehicle label {
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 .add-vehicle input {
     width: 100%;
-    padding: 10px;
+    padding: 8px;
     margin-top: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
 }
 
-@media (max-width: 920px) {
+/* Media queries para móviles */
+@media (max-width: 768px) {
     body {
-        display: flex;
+        display: block;
+        padding: 0 10px;
+    }
+
+    .indexCss{
+        display:block;
+    }
+
+    .headerProfile {
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        padding: 10px;
     }
-    .left {
+
+    /* Ajuste general para otras páginas */
+    .left, .right {
         width: 100%;
+        height: auto;
     }
+
     .right {
-        width: 100%;
+        padding-top: 10px;
+    }
+
+    .profile-details {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-image-container {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    .sidebar {
+        width: 200px;
+        right: -200px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        display: block;
+        padding: 0 10px;
+    }
+
+    .indexCss{
+        display:block;
+    }
+
+    .myButton {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+
+    .login-box {
+        padding: 15px;
+    }
+
+    .login-box button {
+        font-size: 14px;
+        margin-top: 15px;
+    }
+
+    .profile-header h1 {
+        font-size: 16px;
+    }
+
+    .btn {
+        font-size: 24px;
+        padding: 8px 12px;
+    }
+
+    .sidebar a {
+        font-size: 16px;
+    }
+
+    .sidebar .closebtn {
+        font-size: 30px;
     }
 }
 
@@ -229,8 +301,8 @@ body {
 
 .raya {
     background-color: black;
-    width: 320px;
-    height: 5px;
+    width: 100%;
+    height: 4px;
     box-shadow: 1px .1px 10px rgba(0, 0, 0, 0.8);
 }
 

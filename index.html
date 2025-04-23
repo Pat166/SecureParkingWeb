@@ -5,8 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Parking Web</title>
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="icon" href="assets/images/logo.png">
+    <style>
+        /* Estilos para el modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow: auto;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 70%;
+            max-width: 600px;
+            text-align: left;
+        }
+
+        .modal-content h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .modal-content p, .modal-content ul {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .modal-buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .accept-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .decline-btn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        /* Estilo para el enlace de términos */
+        .terms-link {
+            text-align: center;
+            margin: 20px auto;
+            color: #007BFF;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 14px;
+            display: block;
+            width: fit-content;
+        }
+        .terms-link:hover {
+            color: #0056b3;
+        }
+    </style>
 </head>
-<body>
+<body class="indexCss">
     <div class="left">
         <img src="assets/images/logo.png" alt="Logo">
     </div>
@@ -17,8 +95,115 @@
             <h1 class="title2">WEB</h1>
             <div class="raya"></div>
         </div>
-        <a href="login.html" class="myButton">Ingresar</a>
-        <a href="login_admin.html" class="myButton">Ingresar como Administrador</a>
+        <a href="login.html" class="myButton login-btn">Ingresar</a>
+        <a href="login_admin.html" class="myButton admin-btn">Ingresar como Administrador</a>
+        <div class="terms-link" onclick="showTerms()">Ver Términos y Condiciones</div>
+
     </div>
+
+    <!-- Modal de términos y condiciones -->
+    <div id="termsModal" class="modal" role="dialog" aria-labelledby="termsTitle" aria-modal="true">
+        <div class="modal-content">
+            <h2 id="termsTitle">Términos y Condiciones</h2>
+            <p><strong>Última actualización:</strong> 02 de abril de 2025</p>
+
+            <h3>1. Aceptación de los Términos</h3>
+            <p>Al acceder y utilizar Secure Parking Web, usted acepta estar legalmente vinculado por estos Términos y Condiciones. Si no está de acuerdo con alguno de los términos aquí establecidos, por favor no utilice nuestro servicio.</p>
+
+            <h3>2. Descripción del Servicio</h3>
+            <p>Secure Parking Web proporciona una plataforma en línea para la gestión de estacionamiento seguro. Nos reservamos el derecho de modificar o discontinuar el servicio en cualquier momento sin previo aviso.</p>
+
+            <h3>3. Uso Aceptable</h3>
+            <p>Usted se compromete a utilizar el servicio únicamente para fines legales y de acuerdo con estos términos. Está prohibido:</p>
+            <ul>
+                <li>Intentar acceder sin autorización a nuestros sistemas</li>
+                <li>Utilizar el servicio para actividades ilegales</li>
+                <li>Interferir con el funcionamiento normal del servicio</li>
+            </ul>
+
+            <h3>4. Registro y Seguridad de la Cuenta</h3>
+            <p>Para utilizar ciertas funciones, debe registrarse y mantener la confidencialidad de su contraseña. Usted es responsable de toda la actividad que ocurra bajo su cuenta.</p>
+
+            <h3>5. Privacidad y Uso de la Información Personal</h3>
+            <p>Nos comprometemos a proteger su información personal de acuerdo con las leyes aplicables. La información personal que recopilamos (como nombre, correo electrónico, número de teléfono, datos de vehículo y dirección) será utilizada para:</p>
+            <ul>
+                <li><strong>Gestión de cuenta:</strong> Crear y mantener su cuenta, incluyendo verificación de identidad.</li>
+                <li><strong>Prestación del servicio:</strong> Reservar espacios, procesar pagos y enviar confirmaciones.</li>
+                <li><strong>Comunicación:</strong> Enviar actualizaciones y responder a consultas.</li>
+                <li><strong>Seguridad:</strong> Prevenir fraudes y garantizar la seguridad del sistema.</li>
+                <li><strong>Mejora del servicio:</strong> Analizar uso y mejorar la plataforma.</li>
+                <li><strong>Cumplimiento legal:</strong> Cumplir con obligaciones legales.</li>
+            </ul>
+            <p>No compartiremos su información con terceros salvo con proveedores necesarios (ej. procesadores de pago) o por requerimiento legal.</p>
+
+            <h3>6. Limitación de Responsabilidad</h3>
+            <p>Secure Parking Web no será responsable por daños indirectos derivados del uso del servicio.</p>
+
+            <h3>7. Modificaciones</h3>
+            <p>Podemos actualizar estos términos en cualquier momento, notificándole cambios significativos.</p>
+
+            <h3>8. Contacto</h3>
+            <p>Contáctenos en: soporte@secureparkingweb.com</p>
+
+            <div class="modal-buttons">
+                <button class="modal-btn accept-btn" onclick="acceptTerms()">Aceptar</button>
+                <button class="modal-btn decline-btn" onclick="declineTerms()">Rechazar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mostrar el modal si los términos no han sido aceptados
+        window.onload = function() {
+            if (!localStorage.getItem('termsAccepted')) {
+                const modal = document.getElementById('termsModal');
+                modal.style.display = 'block';
+                modal.querySelector('.accept-btn').focus();
+                document.querySelectorAll('.myButton').forEach(btn => {
+                    btn.style.pointerEvents = 'none';
+                    btn.style.opacity = '0.5';
+                });
+            }
+        }
+
+        // Función para aceptar términos
+        function acceptTerms() {
+            localStorage.setItem('termsAccepted', 'true');
+            document.getElementById('termsModal').style.display = 'none';
+            document.querySelectorAll('.myButton').forEach(btn => {
+                btn.style.pointerEvents = 'auto';
+                btn.style.opacity = '1';
+            });
+        }
+
+        // Función para rechazar términos
+        function declineTerms() {
+            alert('Debes aceptar los términos y condiciones para continuar.');
+            window.location.href = 'https://www.google.com'; // Redirige al rechazar
+        }
+
+        // Función para mostrar los términos manualmente
+        function showTerms() {
+            const modal = document.getElementById('termsModal');
+            modal.style.display = 'block';
+            modal.querySelector('.accept-btn').focus();
+            // No desactivamos los botones si los términos ya fueron aceptados
+            if (!localStorage.getItem('termsAccepted')) {
+                document.querySelectorAll('.myButton').forEach(btn => {
+                    btn.style.pointerEvents = 'none';
+                    btn.style.opacity = '0.5';
+                });
+            }
+        }
+
+        // Prevenir clics en los botones mientras el modal está activo
+        document.querySelectorAll('.myButton').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (this.style.pointerEvents === 'none') {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
 </body>
 </html>

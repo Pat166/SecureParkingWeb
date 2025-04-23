@@ -2,16 +2,13 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Expires" content="0">
-    <meta http-equiv="Last-Modified" content="0">
-    <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
-    <meta http-equiv="Pragma" content="no-cache">
     <title>Perfil del Administrador</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        /* Estilos para la barra lateral (ahora a la derecha y azul) */
+        body {
+            display: flex;
+        }
         .sidebar {
             height: 100%;
             width: 0;
@@ -19,7 +16,7 @@
             z-index: 100;
             top: 0;
             right: 0;
-            background-color: #007BFF;
+            background-color: #1a2d68;
             overflow-x: hidden;
             transition: 0.5s;
             padding-top: 60px;
@@ -165,6 +162,9 @@
             <p style="color: red;"><?php echo htmlspecialchars($_GET['error']); ?></p>
         <?php endif; ?>
         <div class="admin-container">
+        <h2>Opciones del Administrador</h2>
+        <a href="generar_pdf.php" class="myButton" style="background-color: #4CAF50; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-bottom: 20px; display: inline-block;">Descargar PDF</a>
+
             <!-- Sección de Usuarios -->
             <div id="users" class="admin-section" style="display: block;">
                 <h2>Usuarios Registrados</h2>

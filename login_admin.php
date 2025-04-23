@@ -1,48 +1,53 @@
 <?php
+ob_start();
 session_start();
 require_once 'config.php';
 
-// Verificar si se enviaron los datos del formulario
-if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['matricula']) || !isset($_POST['contrasena'])) {
-    header('Location: login_admin.php?error=Datos incompletos');
-    exit();
-}
-
-$matricula = trim($_POST['matricula']);
-$contrasena = trim($_POST['contrasena']);
-
-// Validar que los campos no estén vacíos
-if (empty($matricula) || empty($contrasena)) {
-    header('Location: login_admin.php?error=La matrícula y la contraseña son obligatorias');
-    exit();
-}
-
-try {
-    // Buscar al administrador por matrícula
-    $stmt = $pdo->prepare("SELECT * FROM Administradores WHERE MatriculaAdmin = ?");
-    $stmt->execute([$matricula]);
-    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // Verificar si el administrador existe y la contraseña coincide (sin hash)
-    if ($admin && $admin['ContraseñaAdmin'] === $contrasena) {
-        // Guardar datos en la sesión
-        $_SESSION['admin_id'] = $admin['IDAdmin'];
-        $_SESSION['admin_matricula'] = $admin['MatriculaAdmin'];
-        $_SESSION['admin_nombre'] = $admin['NombreAdmin'];
-        
-        // Redirigir al panel de administrador
-        header('Location: admin.php');
-        exit();
-    } else {
-        // Error de autenticación
-        header('Location: login_admin.php?error=Matrícula o contraseña incorrectas');
+// Procesar el formulario solo si se envió por POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Verificar si se enviaron los datos del formulario
+    if (!isset($_POST['matricula']) || !isset($_POST['contrasena'])) {
+        header('Location: login_admin.php?error=Datos incompletos');
         exit();
     }
-} catch (PDOException $e) {
-    // Error de base de datos
-    header('Location: login_admin.php?error=Error en la base de datos: ' . urlencode($e->getMessage()));
-    exit();
+
+    $matricula = trim($_POST['matricula']);
+    $contrasena = trim($_POST['contrasena']);
+
+    // Validar que los campos no estén vacíos
+    if (empty($matricula) || empty($contrasena)) {
+        header('Location: login_admin.php?error=La matrícula y la contraseña son obligatorias');
+        exit();
+    }
+
+    try {
+        // Buscar al administrador por matrícula
+        $stmt = $pdo->prepare("SELECT * FROM Administradores WHERE MatriculaAdmin = ?");
+        $stmt->execute([$matricula]);
+        $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Verificar si el administrador existe y la contraseña coincide
+        if ($admin && $admin['ContraseñaAdmin'] === $contrasena) {
+            // Guardar datos en la sesión
+            $_SESSION['admin_id'] = $admin['IDAdmin'];
+            $_SESSION['admin_matricula'] = $admin['MatriculaAdmin'];
+            $_SESSION['admin_nombre'] = $admin['NombreAdmin'];
+            
+            // Redirigir al panel de administrador
+            header('Location: admin.php');
+            exit();
+        } else {
+            // Error de autenticación
+            header('Location: login_admin.php?error=Matrícula o contraseña incorrectas');
+            exit();
+        }
+    } catch (PDOException $e) {
+        // Error de base de datos
+        header('Location: login_admin.php?error=Error en la base de datos: ' . urlencode($e->getMessage()));
+        exit();
+    }
 }
+// Si no es POST, simplemente muestra el formulario
 ?>
 
 <!DOCTYPE html>

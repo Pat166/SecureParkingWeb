@@ -1,5 +1,6 @@
 <!-- filepath: /c:/Users/adria/Documents/Python/Python/IAPark/SecureParkingWeb/eliminar_vehiculo.php -->
 <?php
+ob_start();
 session_start();
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.html");

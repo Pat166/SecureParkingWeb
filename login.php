@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 
 // Habilitar la visualización de errores de PHP
